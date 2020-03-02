@@ -20,28 +20,23 @@ Tranquilize.UI:Render();
 
 Tranquilize.UI.Frame.TimeSinceLastUpdate = 0;
 Tranquilize.UI.Frame:SetScript("OnUpdate", function(self, elapsed)
-  self.TimeSinceLastUpdate = self.TimeSinceLastUpdate + elapsed; 
-  
+  self.TimeSinceLastUpdate = self.TimeSinceLastUpdate + elapsed;
 
   while (self.TimeSinceLastUpdate > UPDATE_INTERVAL) do
     -- Store elapsed time so we can reset the interval timer before calling other methods.
     -- This way if there's an error, we don't miss our chance to slow the interval down.
     local storedElapsed = self.TimeSinceLastUpdate;
     self.TimeSinceLastUpdate = self.TimeSinceLastUpdate - UPDATE_INTERVAL;
-
-    Tranquilize.Hunters:UpdateCooldowns(storedElapsed);
-    Tranquilize.UI:RenderUpdate();
-
-    
+    Tranquilize.Events:OnUpdateEvent(event, storedElapsed);
   end
 end);
 
 Tranquilize.UI.Frame:SetScript("OnEvent", function(self, event, ...)
-  if (event == "COMBAT_LOG_EVENT_UNFILTERED") then 
+  if (event == "COMBAT_LOG_EVENT_UNFILTERED") then
     Tranquilize.Events:OnCombatLogEvent(event, CombatLogGetCurrentEventInfo());
   end
-  
+
   if (event == "GROUP_ROSTER_UPDATE") then
     Tranquilize.Events:OnGroupRosterUpdateEvent(event);
   end
-end)
+end);

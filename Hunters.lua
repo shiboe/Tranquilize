@@ -1,6 +1,7 @@
 local _, Tranquilize = ...;
 local Hunters = {
   map = {},
+  count = 0,
 }
 
 Tranquilize.Hunters = Hunters;
@@ -12,18 +13,15 @@ local TRANQ_COOLDOWN = 20.0;
 --
 
 function Hunters:MarkAllStale()
-  for i = 1, #self do
-    self[i].stale = true;
+  for id, hunter in pairs(self.map) do
+    hunter.stale = true;
   end
 end
 
 function Hunters:PurgeStale()
-  print('test2', #self)
-  for i = 1, #self do
-    print('purge?', i)
-    if (self[i].stale) then
-      print('purged!')
-      self:Remove(self[i].id);
+  for id, hunter in pairs(self.map) do
+    if (hunter.stale == true) then
+      self:Remove(id);
     end
   end
 end
@@ -37,11 +35,12 @@ function Hunters:UpdateRaidFromList()
     if (classNormalized ~= "HUNTER") then return end;
 
     local GUID = UnitGUID("raid" .. i);
-    
+
+    -- TODO: pass online, dead, etc for more status displays!
     if (self.map[GUID] == nil) then
-      self:Add(GUID, name); -- TODO: pass online, dead, etc for more status displays!
+      self:Add(GUID, name);
     else
-      self[self.map[GUID]].stale = false;
+      self:Update(GUID, name);
     end
   end
 
@@ -49,48 +48,44 @@ function Hunters:UpdateRaidFromList()
 end
 
 function Hunters:Add(id, name)
-  local n = #self + 1;
-
-  self[n] = {
-    id = id,
-    name = name,
-    row = nil,
-    tranqCooldown = nil, 
-    animating = false,
-    stale = false,
-  };
-
-  self.map[id] = n;
+  if (self.map[id] ~= nil) then
+    self.map[id].name = name;
+  else
+    self.map[id] = {
+      id = id,
+      name = name,
+      row = Tranquilize.UI:GetRow(),
+      tranqCooldown = nil,
+      animating = false,
+      stale = false,
+    };
+  end
 end
 
-function Hunters:Remove(id)
-  if (self.map[id] ~= nil) then
-    self[self.map[id]] = nil;
-    self.map[id] = nil;
-  end
+function Hunters:Update(id, name)
+  local hunter = self.map[id];
+
+  hunter.name = name;
+  hunter.stale = false;
 end
 
 function Hunters:Get(id)
-  if (self.map[id] ~= nil) then
-    return self[self.map[id]];
-  else
-    return nil;
-  end
+  return self.map[id];
 end
 
-function Hunters:SetRow(hunter, row)
-  hunter.row = row;
+function Hunters:Remove(id)
+  Tranquilize.UI:ReleaseRow(self.map[id].row);
+  self.map[id] = nil;
 end
 
 function Hunters:UpdateCooldowns(elapsed)
-  print('test', #self)
-  for i = 1, #self do
-    if (self[i].tranqCooldown ~= nil) then
-      self[i].tranqCooldown = self[i].tranqCooldown - elapsed;
+  for id, hunter in pairs(self.map) do
+    if (hunter.tranqCooldown ~= nil) then
+      hunter.tranqCooldown = hunter.tranqCooldown - elapsed;
 
-      if (self[i].tranqCooldown <= 0) then
-        self[i].tranqCooldown = nil;
-      end 
+      if (hunter.tranqCooldown <= 0) then
+        hunter.tranqCooldown = nil;
+      end
     end
   end
 end

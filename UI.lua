@@ -1,6 +1,6 @@
 local _, Tranquilize = ...;
 local UI = {
-  rows = {}
+  releasedRows = {}
 }
 
 Tranquilize.UI = UI;
@@ -22,40 +22,20 @@ UI.Frame:SetSize(FRAME_WIDTH, 100);
 UI.Frame:SetPoint("CENTER", UIParent, "CENTER");
 
 function UI:Render()
-  local count = #Tranquilize.Hunters;
+  local rowCount = 0;
+  local previous = nil
 
-  if (count > 0) then
-    self:RenderHunters(count);
-  else
-    self:RenderEmpty();
+  for id, hunter in pairs(Tranquilize.Hunters.map) do
+    self:RenderRow(hunter, previous);
+    previous = hunter;
+    rowCount = rowCount + 1;
   end
 
-  self:SetFrameHeight(count);
-end
-
-function UI:RenderHunters(count)
-  for i = 1, count do
-    if (UI.rows[i] == nil) then
-      UI.rows[i] = UI:CreateRow();
-    end
-
-    Tranquilize.Hunters:SetRow(Tranquilize.Hunters[i], UI.rows[i]);
-    UI:UpdateRow(i, Tranquilize.Hunters[i]);
+  if (rowCount == 0) then
+    -- TODO empty render
   end
 
-  for i = count + 1, #UI.rows do
-    UI.rows[i]:Hide();
-  end
-end
-
-function UI:RenderCooldowns()
-
-end
-
-function UI:RenderEmpty()
-  for i = 1, #UI.rows do
-    UI.rows[i]:Hide();
-  end
+  self:SetFrameHeight(rowCount);
 end
 
 function UI:SetFrameHeight(rowCount)
@@ -84,22 +64,42 @@ function UI:CreateRow()
   return row;
 end
 
-function UI:UpdateRow(index, hunter)
-  UI.rows[index].nameplate:SetText(hunter.name);
+function UI:GetRow()
+  local row = nil;
 
-  if (index > 1) then
-    UI.rows[index]:SetPoint("TOP", UI.rows[index - 1], "BOTTOM", 0, -1 * ROW_VERTICAL_PADDING);
+  if (#self.releasedRows > 0) then
+    row = self.releasedRows[#self.releasedRows];
+    self.releasedRows[#self.releasedRows] = nil;
   else
-    UI.rows[index]:SetPoint("TOP", UI.Frame.Bg, "TOP", 0, -1 * ROW_VERTICAL_PADDING);
+    row = self:CreateRow();
+  end
+
+  row.active = true;
+
+  return row;
+end
+
+function UI:ReleaseRow(row)
+  self.releasedRows[#self.releasedRows + 1] = row;
+  row.active = false;
+  row:Hide();
+end
+
+function UI:RenderRow(index, hunter, previousHunter)
+  hunter.row.nameplate:SetText(hunter.name);
+
+  if (previousHunter ~= nil) then
+    hunter.row:SetPoint("TOP", previousHunter.row, "BOTTOM", 0, -1 * ROW_VERTICAL_PADDING);
+  else
+    hunter.row:SetPoint("TOP", UI.Frame.Bg, "TOP", 0, -1 * ROW_VERTICAL_PADDING);
   end
 end
 
-function UI:RenderUpdate()
-  for i = 1, #Tranquilize.Hunters do
-    local hunter = Tranquilize.Hunters[i];
-    if (hunter.animating == false) then return end;
+function UI:Update()
+  for id, hunter in pairs(Tranquilize.Hunters) do
+    if (hunter.animating == false) then break end;
 
-    self:UpdateRowCounter(hunter);
+    hunter.row.counter:SetText(hunter.tranqCooldown);
 
     if (hunter.tranqCooldown == nil) then
       hunter.animating = false;
@@ -114,8 +114,4 @@ function UI:UpdateRowNameplate(hunter)
   else
     hunter.row.nameplate:SetFontObject("GameFontDarkGraySmall");
   end
-end
-
-function UI:UpdateRowCounter(hunter)
-  hunter.row.counter:SetText(hunter.tranqCooldown);
 end

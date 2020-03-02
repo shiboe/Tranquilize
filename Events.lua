@@ -3,7 +3,7 @@ local Events = {}
 
 Tranquilize.Events = Events;
 
--- 
+--
 
 function Events:OnCombatLogEvent(event, ...)
   local timestamp, subEvent, _, sourceGUID = ...;
@@ -14,7 +14,7 @@ function Events:OnCombatLogEvent(event, ...)
   -- We validate that the event was triggered by our player and our spell.
   if (sourceGUID~=player) then return end
 
-  if (spellName~="Tranquilizing Shot") then 
+  if (spellName~="Tranquilizing Shot") then
     self:HandleTranqShot(timestamp, subEvent, sourceGUID, targetName);
   end
 end
@@ -36,4 +36,10 @@ end
 
 function Events:OnGroupRosterUpdateEvent(event, ...)
   Tranquilize.Hunters:UpdateRaidFromList();
+  Tranquilize.UI:Render();
+end
+
+function Events:OnUpdateEvent(event, elapsed)
+  Tranquilize.Hunters:UpdateCooldowns(elapsed);
+  Tranquilize.UI:Update();
 end
