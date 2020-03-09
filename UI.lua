@@ -7,12 +7,13 @@ Tranquilize.UI = UI;
 
 --
 
-local ROW_INDENT = 40;
-local ROW_VERTICAL_PADDING = 10;
+local ROW_INDENT = 30;
+local ROW_VERTICAL_PADDING = 2;
+local ROW_HEIGHT = 24;
 
-local FRAME_WIDTH = 160;
-local FRAME_VERTICAL_PADDING = 10;
-local FRAME_BORDER_HEIGHT = 5;
+local FRAME_WIDTH = 180;
+local FRAME_INNER_PADDING = 4;
+local FRAME_OUTER_PADDING = 9;
 
 --
 
@@ -21,25 +22,36 @@ UI.Frame = CreateFrame("Frame", "TranquilizeFrame", UIParent, "TranslucentFrameT
 UI.Frame:SetSize(FRAME_WIDTH, 100);
 UI.Frame:SetPoint("CENTER", UIParent, "CENTER");
 
+UI.Frame:SetMovable(true)
+UI.Frame:EnableMouse(true)
+UI.Frame:RegisterForDrag("LeftButton")
+UI.Frame:SetScript("OnDragStart", UI.Frame.StartMoving)
+UI.Frame:SetScript("OnDragStop", UI.Frame.StopMovingOrSizing)
+
 function UI:Render()
   local rowCount = 0;
-  local previous = nil
+  local previous = nil;
+  local row = nil;
 
   for id, hunter in pairs(Tranquilize.Hunters.map) do
-    self:RenderRow(hunter, previous);
+    row = self:RenderRow(hunter, previous);
     previous = hunter;
     rowCount = rowCount + 1;
   end
 
-  if (rowCount == 0) then
-    -- TODO empty render
+  if (row ~= nil) then
+    self:SetFrameHeightWithRows(row:GetHeight(), rowCount);
+  else
+    UI.Frame:SetSize(FRAME_WIDTH, 100);
   end
-
-  self:SetFrameHeight(rowCount);
 end
 
-function UI:SetFrameHeight(rowCount)
-  local height = (rowCount * (ROW_VERTICAL_PADDING + UI.rows[1]:GetHeight())) + (ROW_VERTICAL_PADDING * 2) + (FRAME_BORDER_HEIGHT * 2);
+function UI:Reset()
+  UI.Frame:SetPoint("CENTER", UIParent, "CENTER");
+end
+
+function UI:SetFrameHeightWithRows(rowHeight, rowCount)
+  local height = (rowCount * (ROW_VERTICAL_PADDING + rowHeight)) + (FRAME_INNER_PADDING * 2) + (FRAME_OUTER_PADDING * 2);
   UI.Frame:SetSize(FRAME_WIDTH, height);
 end
 
@@ -50,13 +62,24 @@ function UI:CreateRow()
 
   row.nameplate = nameplate;
   row.counter = counter;
+  row:SetBackdrop({
+	  bgFile = [[Textures/white.blp]], tile = false, tileSize=0,
+	  --edgeFile = [[white.blp]],
+--	  edgeFile="Interface/Tooltips/UI-Tooltip-Border",
+	  edgeSize = 0,
+--	  insets = {left=2, top=2, right=2, bottom=2}
+	})
+  row:SetBackdropColor(1, .2, 1, 0.4);
+  --row:SetBackdropBorderColor(1, .4, 1, 0.7);
 
-  row:SetSize(FRAME_WIDTH, 30);
+  row:SetSize(FRAME_WIDTH, ROW_HEIGHT);
   row:SetPoint("LEFT", UI.Frame.Bg, "LEFT", 5, 0);
   row:SetPoint("RIGHT", UI.Frame.Bg, "RIGHT", -5, 0);
 
+  counter:SetWidth(28);
   counter:SetPoint("CENTER", row, "CENTER");
   counter:SetPoint("LEFT", row, "LEFT", 5, 0);
+  counter:SetText('rdy');
 
   nameplate:SetPoint("CENTER", row, "CENTER");
   nameplate:SetPoint("LEFT", counter, "RIGHT", 10, 0);
@@ -85,21 +108,23 @@ function UI:ReleaseRow(row)
   row:Hide();
 end
 
-function UI:RenderRow(index, hunter, previousHunter)
+function UI:RenderRow(hunter, previousHunter)
   hunter.row.nameplate:SetText(hunter.name);
 
   if (previousHunter ~= nil) then
     hunter.row:SetPoint("TOP", previousHunter.row, "BOTTOM", 0, -1 * ROW_VERTICAL_PADDING);
   else
-    hunter.row:SetPoint("TOP", UI.Frame.Bg, "TOP", 0, -1 * ROW_VERTICAL_PADDING);
+    hunter.row:SetPoint("TOP", UI.Frame.Bg, "TOP", 0, -1 * FRAME_INNER_PADDING);
   end
+
+  return hunter.row;
 end
 
 function UI:Update()
-  for id, hunter in pairs(Tranquilize.Hunters) do
+  for id, hunter in pairs(Tranquilize.Hunters.map) do
     if (hunter.animating == false) then break end;
 
-    hunter.row.counter:SetText(hunter.tranqCooldown);
+    self:UpdateRowCounter(hunter);
 
     if (hunter.tranqCooldown == nil) then
       hunter.animating = false;
@@ -109,9 +134,22 @@ function UI:Update()
 end
 
 function UI:UpdateRowNameplate(hunter)
-  if (hunter.tranqCooldown ~= nil) then
+  if (hunter.tranqCooldown == nil) then
     hunter.row.nameplate:SetFontObject("GameFontHighlightSmall");
   else
     hunter.row.nameplate:SetFontObject("GameFontDarkGraySmall");
   end
+end
+
+function UI:UpdateRowCounter(hunter)
+  if (hunter.tranqCooldown == nil) then
+    hunter.row.counter:SetText('rdy');
+  else
+    hunter.row.counter:SetText(self:Round(hunter.tranqCooldown, 1));
+  end
+end
+
+-- Helper rounding method for numbers.
+function UI:Round(number, decimals)
+  return (("%%.%df"):format(decimals)):format(number);
 end

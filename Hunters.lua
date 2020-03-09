@@ -2,6 +2,7 @@ local _, Tranquilize = ...;
 local Hunters = {
   map = {},
   count = 0,
+  loading = false,
 }
 
 Tranquilize.Hunters = Hunters;
@@ -32,18 +33,28 @@ function Hunters:UpdateRaidFromList()
 
   for i = 1, GetNumGroupMembers() do
     local name, rank, subgroup, level, class, classNormalized, zone, online, isDead, role, isMasterLooter = GetRaidRosterInfo(i);
-    if (classNormalized ~= "HUNTER") then return end;
+    -- print('member', name, classNormalized)
+    -- If our get request failed, we will have to try again later.
+    if (name == nil) then
+      self.loading = true;
+      -- print('still loading...')
+      return
+    end
 
-    local GUID = UnitGUID("raid" .. i);
+    if (classNormalized == 'HUNTER') then
+      local GUID = UnitGUID(name);
 
-    -- TODO: pass online, dead, etc for more status displays!
-    if (self.map[GUID] == nil) then
-      self:Add(GUID, name);
-    else
-      self:Update(GUID, name);
+      -- TODO: pass online, dead, etc for more status displays!
+      if (self.map[GUID] == nil) then
+        self:Add(GUID, name);
+      else
+        self:Update(GUID, name);
+      end
     end
   end
 
+  -- print('done loading.')
+  self.loading = false;
   self:PurgeStale();
 end
 
@@ -99,4 +110,6 @@ function Hunters:TranqFire(timestamp, sourceGUID, result, targetName)
 
   Tranquilize.UI:UpdateRowNameplate(hunter);
   Tranquilize.UI:UpdateRowCounter(hunter);
+
+  Tranquilize.Announce:Chat(targetName, result);
 end

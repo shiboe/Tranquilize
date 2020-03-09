@@ -5,6 +5,9 @@ Tranquilize.Events = Events;
 
 --
 
+-- local SPELL_NAME = "Arcane Shot";
+local SPELL_NAME = "Tranquilizing Shot";
+
 function Events:OnCombatLogEvent(event, ...)
   local timestamp, subEvent, _, sourceGUID = ...;
   local spellName = select(13, ...);
@@ -12,9 +15,7 @@ function Events:OnCombatLogEvent(event, ...)
   local player = UnitGUID("player");
 
   -- We validate that the event was triggered by our player and our spell.
-  if (sourceGUID~=player) then return end
-
-  if (spellName~="Tranquilizing Shot") then
+  if (spellName == SPELL_NAME) then
     self:HandleTranqShot(timestamp, subEvent, sourceGUID, targetName);
   end
 end
@@ -40,6 +41,12 @@ function Events:OnGroupRosterUpdateEvent(event, ...)
 end
 
 function Events:OnUpdateEvent(event, elapsed)
+  if (Tranquilize.Hunters.loading) then
+    -- print('update raid from list because loading...')
+    Tranquilize.Hunters:UpdateRaidFromList();
+    Tranquilize.UI:Render();
+  end
+
   Tranquilize.Hunters:UpdateCooldowns(elapsed);
   Tranquilize.UI:Update();
 end

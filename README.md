@@ -1,2 +1,3 @@
 # Tranquilize
-A simple addon that speaks amongst local hunters on the subject of Tranquilizing Shot.
+
+Raid announcements for Tranquilizing Shot hit/miss along with timer UI.

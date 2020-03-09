@@ -2,11 +2,13 @@
 ## Title: Tranquilize
 ## Notes: A simple addon that speaks amongst local hunters on the subject of Tranquilizing Shot.
 ## Author: Shiboe
+## Version: v2.0.11303
 ## DefaultState: enabled
 ## SavedVariables: Tranquilize
 
 UI.lua
 Hunters.lua
 Events.lua
+Announce.lua
 
 Tranquilize.lua
