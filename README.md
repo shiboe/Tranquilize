@@ -17,6 +17,11 @@ Feel free to drop suggestions or bug details my way in comments. This is still a
 
 Features added in each version are documented here. Versions follow a modified semver, with a major.minor.patch structure. Patch is omitted from this changelog as it is simply used to iterate game versions.
 
+### v2.2
+
+- Add unpartied default UI so it's not just a blank box when not grouped.
+- Add additional scripting for easier dev (on mac only).
+
 ### v2.1
 
 - Add zip script with better project structure for better publishing.

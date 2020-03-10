@@ -1,8 +1,10 @@
 {
   "name": "tranquilize",
-  "version": "2.1.11303",
+  "version": "2.2.11303",
   "description": "Raid announcements for Tranquilizing Shot hit/miss along with timer UI.",
   "scripts": {
+    "copy": "cp -r $PWD/Tranquilize /Applications/World\\ of\\ Warcraft/_classic_/Interface/AddOns/",
+    "watch": "onchange 'Tranquilize/**/*' -- npm run copy",
     "zip": "bestzip Tranquilize.zip Tranquilize/*"
   },
   "repository": {
@@ -12,6 +14,7 @@
   "author": "Stephen Cave <sccave@gmail.com>",
   "license": "ISC",
   "dependencies": {
-    "bestzip": "^2.1.5"
+    "bestzip": "^2.1.5",
+    "onchange": "^6.1.0"
   }
 }

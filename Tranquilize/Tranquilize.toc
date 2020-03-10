@@ -2,7 +2,7 @@
 ## Title: Tranquilize
 ## Notes: Raid announcements for Tranquilizing Shot hit/miss along with timer UI.
 ## Author: Shiboe
-## Version: v2.1.11303
+## Version: v2.2.11303
 ## DefaultState: enabled
 ## SavedVariables: Tranquilize
 

@@ -22,11 +22,25 @@ UI.Frame = CreateFrame("Frame", "TranquilizeFrame", UIParent, "TranslucentFrameT
 UI.Frame:SetSize(FRAME_WIDTH, 100);
 UI.Frame:SetPoint("CENTER", UIParent, "CENTER");
 
-UI.Frame:SetMovable(true)
-UI.Frame:EnableMouse(true)
-UI.Frame:RegisterForDrag("LeftButton")
-UI.Frame:SetScript("OnDragStart", UI.Frame.StartMoving)
-UI.Frame:SetScript("OnDragStop", UI.Frame.StopMovingOrSizing)
+UI.Frame:SetMovable(true);
+UI.Frame:EnableMouse(true);
+UI.Frame:RegisterForDrag("LeftButton");
+UI.Frame:SetScript("OnDragStart", UI.Frame.StartMoving);
+UI.Frame:SetScript("OnDragStop", UI.Frame.StopMovingOrSizing);
+
+UI.Frame.header = UI.Frame:CreateFontString(nil, "OVERLAY", "GameFontNormal");
+UI.Frame.header:SetPoint("TOP", UI.Frame.Bg, "TOP", 0 , -14);
+UI.Frame.header:SetPoint("CENTER", UI.Frame.Bg, "CENTER");
+UI.Frame.header:SetText("Tranquilize");
+UI.Frame.header:SetPoint("LEFT", UI.Frame.Bg, "LEFT", 5, 0);
+UI.Frame.header:SetPoint("RIGHT", UI.Frame.Bg, "RIGHT", -5, 0);
+
+UI.Frame.subheader = UI.Frame:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall");
+UI.Frame.subheader:SetPoint("CENTER", UI.Frame.Bg, "CENTER");
+UI.Frame.subheader:SetPoint("TOP", UI.Frame.header, "BOTTOM");
+UI.Frame.subheader:SetText("Join a raid/party to start.");
+UI.Frame.subheader:SetPoint("LEFT", UI.Frame.Bg, "LEFT", 5, 0);
+UI.Frame.subheader:SetPoint("RIGHT", UI.Frame.Bg, "RIGHT", -5, 0);
 
 function UI:Render()
   local rowCount = 0;
@@ -41,8 +55,12 @@ function UI:Render()
 
   if (row ~= nil) then
     self:SetFrameHeightWithRows(row:GetHeight(), rowCount);
+    UI.Frame.header:Hide();
+    UI.Frame.subheader:Hide();
   else
-    UI.Frame:SetSize(FRAME_WIDTH, 100);
+    UI.Frame:SetSize(FRAME_WIDTH, 70);
+    UI.Frame.header:Show();
+    UI.Frame.subheader:Show();
   end
 end
 
