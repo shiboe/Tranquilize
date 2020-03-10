@@ -1,8 +1,8 @@
 ## Interface: 11303
 ## Title: Tranquilize
-## Notes: A simple addon that speaks amongst local hunters on the subject of Tranquilizing Shot.
+## Notes: Raid announcements for Tranquilizing Shot hit/miss along with timer UI.
 ## Author: Shiboe
-## Version: v2.0.11303
+## Version: v2.1.11303
 ## DefaultState: enabled
 ## SavedVariables: Tranquilize
 
