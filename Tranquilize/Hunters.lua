@@ -1,7 +1,6 @@
 local _, Tranquilize = ...;
 local Hunters = {
   map = {},
-  count = 0,
   loading = false,
 }
 
@@ -37,7 +36,7 @@ function Hunters:UpdateRaidFromList()
     -- If our get request failed, we will have to try again later.
     if (name == nil) then
       self.loading = true;
-      -- print('still loading...')
+      print('[Tranquilize] Loading: waiting for group member data to be available...');
       return
     end
 
@@ -86,6 +85,7 @@ end
 
 function Hunters:Remove(id)
   Tranquilize.UI:ReleaseRow(self.map[id].row);
+  self.map[id].row = nil;
   self.map[id] = nil;
 end
 

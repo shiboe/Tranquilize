@@ -17,6 +17,11 @@ Feel free to drop suggestions or bug details my way in comments. This is still a
 
 Features added in each version are documented here. Versions follow a modified semver, with a major.minor.patch structure. Patch is omitted from this changelog as it is simply used to iterate game versions.
 
+### v2.3
+
+- Fix bug with hunter rows not being reusable and breaking the UI in some cases.
+- Add print messages for some states (hiding the frame, long loading).
+
 ### v2.2
 
 - Add unpartied default UI so it's not just a blank box when not grouped.

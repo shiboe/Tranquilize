@@ -111,6 +111,7 @@ function UI:GetRow()
   if (#self.releasedRows > 0) then
     row = self.releasedRows[#self.releasedRows];
     self.releasedRows[#self.releasedRows] = nil;
+    row:Show();
   else
     row = self:CreateRow();
   end
@@ -122,7 +123,6 @@ end
 
 function UI:ReleaseRow(row)
   self.releasedRows[#self.releasedRows + 1] = row;
-  row.active = false;
   row:Hide();
 end
 

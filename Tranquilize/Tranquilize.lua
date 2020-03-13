@@ -15,6 +15,7 @@ end
 SLASH_TRANQUILIZEHIDE1 = "/tranqhide";
 SlashCmdList["TRANQUILIZEHIDE"] = function(msg)
   Tranquilize.UI.Frame:Hide();
+  print("[Tranquilize] Hidden: Restore with /tranqshow");
 end
 
 --
