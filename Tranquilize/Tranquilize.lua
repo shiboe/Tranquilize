@@ -18,6 +18,24 @@ SlashCmdList["TRANQUILIZEHIDE"] = function(msg)
   print("[Tranquilize] Hidden: Restore with /tranqshow");
 end
 
+SLASH_TRANQUILIZEDEBUG1 = "/tranqdebug";
+SlashCmdList["TRANQUILIZEDEBUG"] = function(msg)
+  print("--HUNTERS--");
+  for id, hunter in pairs(Tranquilize.Hunters.map) do
+    Tranquilize.Hunters:PrintHunter(hunter);
+  end
+
+  print('\n');
+  print("--ROWS--");
+  for id, row in pairs(Tranquilize.UI.rows) do
+    Tranquilize.UI:PrintRow(row);
+  end
+
+  print('\n');
+  print("TOTAL: ", #Tranquilize.UI.rows);
+  print("RELEASED: ", #Tranquilize.UI.releasedRows)
+end
+
 --
 
 Tranquilize.UI.Frame:RegisterEvent("ADDON_LOADED");

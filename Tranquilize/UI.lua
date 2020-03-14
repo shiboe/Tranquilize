@@ -1,5 +1,6 @@
 local _, Tranquilize = ...;
 local UI = {
+  rows = {},
   releasedRows = {}
 }
 
@@ -68,6 +69,10 @@ function UI:Reset()
   UI.Frame:SetPoint("CENTER", UIParent, "CENTER");
 end
 
+function UI:PrintRow(row)
+  print('R - id: ', row.id, ' show: ', row:IsVisible(), ' n: ', row.nameplate:GetText());
+end
+
 function UI:SetFrameHeightWithRows(rowHeight, rowCount)
   local height = (rowCount * (ROW_VERTICAL_PADDING + rowHeight)) + (FRAME_INNER_PADDING * 2) + (FRAME_OUTER_PADDING * 2);
   UI.Frame:SetSize(FRAME_WIDTH, height);
@@ -77,6 +82,9 @@ function UI:CreateRow()
   local row = CreateFrame("Frame", "TranquilizeFrameRow", UI.Frame);
   local nameplate = row:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall");
   local counter = row:CreateFontString(nil, "OVERLAY", "NumberFontNormalYellow");
+
+  row.id = #UI.rows + 1;
+  UI.rows[row.id] = row;
 
   row.nameplate = nameplate;
   row.counter = counter;

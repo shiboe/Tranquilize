@@ -36,7 +36,6 @@ function Hunters:UpdateRaidFromList()
     -- If our get request failed, we will have to try again later.
     if (name == nil) then
       self.loading = true;
-      print('[Tranquilize] Loading: waiting for group member data to be available...');
       return
     end
 
@@ -55,6 +54,15 @@ function Hunters:UpdateRaidFromList()
   -- print('done loading.')
   self.loading = false;
   self:PurgeStale();
+end
+
+function Hunters:PrintHunter(hunter)
+  print('H - id: ', hunter.id, ' n: ', hunter.name, ' cd: ', hunter.tranqCooldown, ' an: ', hunter.animating, ' st: ', hunter.stale);
+  if (hunter.row == nil) then
+    print('(no row)');
+  else
+    Tranquilize.UI:PrintRow(hunter.row);
+  end
 end
 
 function Hunters:Add(id, name)
