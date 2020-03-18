@@ -119,5 +119,7 @@ function Hunters:TranqFire(timestamp, sourceGUID, result, targetName)
   Tranquilize.UI:UpdateRowNameplate(hunter);
   Tranquilize.UI:UpdateRowCounter(hunter);
 
-  Tranquilize.Announce:Chat(targetName, result);
+  if (UnitGUID("player") == sourceGUID) then
+    Tranquilize.Announce:Chat(targetName, result);
+  end
 end

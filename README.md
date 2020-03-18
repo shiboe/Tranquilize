@@ -17,6 +17,10 @@ Feel free to drop suggestions or bug details my way in comments. This is still a
 
 Features added in each version are documented here. Versions follow a modified semver, with a major.minor.patch structure. Patch is omitted from this changelog as it is simply used to iterate game versions.
 
+### v2.5
+
+- Fix new bug with announcements, where you announce on every hunter's tranq shot.
+
 ### v2.4
 
 - Add /tranqdebug command to help live diagnose remaining UI issues in raid.
