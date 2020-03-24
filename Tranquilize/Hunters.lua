@@ -26,6 +26,24 @@ function Hunters:PurgeStale()
   end
 end
 
+function Hunters:UpdateSolo()
+  self:MarkAllStale()
+
+  local _, class = UnitClass("player");
+  local name = UnitName("player");
+  local GUID = UnitGUID("player");
+
+  if (class == 'HUNTER') then
+    if (self.map[GUID] == nil) then
+      self:Add(GUID, name);
+    else
+      self:Update(GUID, name);
+    end
+  end
+
+  self:PurgeStale();
+end
+
 
 function Hunters:UpdateRaidFromList()
   self:MarkAllStale()

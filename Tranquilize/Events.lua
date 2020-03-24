@@ -10,7 +10,7 @@ local SPELL_NAME = "Tranquilizing Shot";
 
 function Events:OnCombatLogEvent(event, ...)
   local timestamp, subEvent, _, sourceGUID = ...;
-  local spellName = select(13, ...);
+  local spellName = select(13, ...); -- Property spellId(12) is currently bugged in classic.
   local targetName = select(9, ...);
   local player = UnitGUID("player");
 
@@ -24,19 +24,20 @@ function Events:HandleTranqShot(timestamp, subEvent, sourceGUID, targetName)
   -- Only for testing purposes with something like arcane shot
   if (subEvent=="SPELL_DAMAGE") then
     Tranquilize.Hunters:TranqFire(timestamp, sourceGUID, "HIT", targetName);
-  end
-
-  if (subEvent=="SPELL_MISSED") then
+  elseif (subEvent=="SPELL_MISSED") then
     Tranquilize.Hunters:TranqFire(timestamp, sourceGUID, "MISS", targetName);
-  end
-
-  if (subEvent=="SPELL_DISPEL") then
+  elseif (subEvent=="SPELL_DISPEL") then
     Tranquilize.Hunters:TranqFire(timestamp, sourceGUID, "HIT", targetName);
   end
 end
 
 function Events:OnGroupRosterUpdateEvent(event, ...)
-  Tranquilize.Hunters:UpdateRaidFromList();
+  if (IsInGroup()) then
+    Tranquilize.Hunters:UpdateRaidFromList();
+  else
+    Tranquilize.Hunters:UpdateSolo();
+  end
+
   Tranquilize.UI:Render();
 end
 

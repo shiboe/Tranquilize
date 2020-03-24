@@ -17,6 +17,12 @@ Feel free to drop suggestions or bug details my way in comments. This is still a
 
 Features added in each version are documented here. Versions follow a modified semver, with a major.minor.patch structure. Patch is omitted from this changelog as it is simply used to iterate game versions.
 
+### v3.0
+
+- Fix UI bug that causes hunter counters beyond the first in list to freeze.
+- Change addon to be disabled by default.
+- Change addon to always show hunter UI, even when solo.
+
 ### v2.5
 
 - Fix new bug with announcements, where you announce on every hunter's tranq shot.

@@ -148,13 +148,13 @@ end
 
 function UI:Update()
   for id, hunter in pairs(Tranquilize.Hunters.map) do
-    if (hunter.animating == false) then break end;
+    if (hunter.animating == true) then
+      self:UpdateRowCounter(hunter);
 
-    self:UpdateRowCounter(hunter);
-
-    if (hunter.tranqCooldown == nil) then
-      hunter.animating = false;
-      self:UpdateRowNameplate(hunter);
+      if (hunter.tranqCooldown == nil) then
+        hunter.animating = false;
+        self:UpdateRowNameplate(hunter);
+      end
     end
   end
 end

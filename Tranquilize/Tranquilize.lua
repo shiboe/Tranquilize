@@ -59,8 +59,10 @@ Tranquilize.UI.Frame:SetScript("OnUpdate", function(self, elapsed)
 end);
 
 Tranquilize.UI.Frame:SetScript("OnEvent", function(self, event, ...)
-  if (event == "ADDON_LOADED") then
+  if (event == "ADDON_LOADED" and ... == 'Tranquilize') then
     Tranquilize.Events:OnGroupRosterUpdateEvent(event);
+    Tranquilize.UI.Frame:Hide();
+    print("[Tranquilize] Loaded: Start blastin' with /tranqshow");
   end
 
   if (event == "COMBAT_LOG_EVENT_UNFILTERED") then
