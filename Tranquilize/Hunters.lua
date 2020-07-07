@@ -128,15 +128,19 @@ function Hunters:UpdateCooldowns(elapsed)
 end
 
 function Hunters:TranqFire(timestamp, sourceGUID, result, targetName)
+  -- Find the hunter that triggered the event, and exit if none is found.
   local hunter = self:Get(sourceGUID);
   if (hunter == nil) then return end;
 
+  -- Start animating the tranq cooldown for the hunter.
   hunter.animating = true;
   hunter.tranqCooldown = TRANQ_COOLDOWN;
 
+  -- Immediately render the event for the hunter.
   Tranquilize.UI:UpdateRowNameplate(hunter);
   Tranquilize.UI:UpdateRowCounter(hunter);
 
+  -- If we are the hunter that triggered the event, announce it.
   if (UnitGUID("player") == sourceGUID) then
     Tranquilize.Announce:Chat(targetName, result);
   end

@@ -13,9 +13,19 @@ Feel free to drop suggestions or bug details my way in comments. This is still a
 - **/tranqshow** - show and reset the UI
 - **/tranqhide** - hide the UI
 
+## Upcoming features
+
+- Reorder hunter list with broadcast to sync.
+- Specify a broadcast channel.
+- Tranqhelp command to list commands with descriptions in game.
+
 ## Changelog
 
 Features added in each version are documented here. Versions follow a modified semver, with a major.minor.patch structure. Patch is omitted from this changelog as it is simply used to iterate game versions.
+
+### v3.1
+- Fix bug where simultaneous tranq shots only render for the first hunter.
+- Update to latest WoW Classic version.
 
 ### v3.0
 

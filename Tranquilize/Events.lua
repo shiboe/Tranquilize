@@ -28,6 +28,8 @@ function Events:HandleTranqShot(timestamp, subEvent, sourceGUID, targetName)
     Tranquilize.Hunters:TranqFire(timestamp, sourceGUID, "MISS", targetName);
   elseif (subEvent=="SPELL_DISPEL") then
     Tranquilize.Hunters:TranqFire(timestamp, sourceGUID, "HIT", targetName);
+  elseif (subEvent=="SPELL_DISPEL_FAILED") then
+    Tranquilize.Hunters:TranqFire(timestamp, sourceGUID, "HIT (failed)", targetName);
   end
 end
 

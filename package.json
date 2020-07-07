@@ -1,6 +1,6 @@
 {
   "name": "tranquilize",
-  "version": "3.0.11304",
+  "version": "3.1.11305",
   "description": "Raid announcements for Tranquilizing Shot hit/miss along with timer UI.",
   "scripts": {
     "copy": "cp -r $PWD/Tranquilize /Applications/World\\ of\\ Warcraft/_classic_/Interface/AddOns/",
@@ -15,6 +15,6 @@
   "license": "ISC",
   "dependencies": {
     "bestzip": "^2.1.5",
-    "onchange": "^6.1.0"
+    "onchange": "7.0.2"
   }
 }
