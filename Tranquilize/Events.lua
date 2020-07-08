@@ -21,15 +21,10 @@ function Events:OnCombatLogEvent(event, ...)
 end
 
 function Events:HandleTranqShot(timestamp, subEvent, sourceGUID, targetName)
-  -- Only for testing purposes with something like arcane shot
-  if (subEvent=="SPELL_DAMAGE") then
+  if (subEvent=="SPELL_CAST_SUCCESS") then
     Tranquilize.Hunters:TranqFire(timestamp, sourceGUID, "HIT", targetName);
   elseif (subEvent=="SPELL_MISSED") then
     Tranquilize.Hunters:TranqFire(timestamp, sourceGUID, "MISS", targetName);
-  elseif (subEvent=="SPELL_DISPEL") then
-    Tranquilize.Hunters:TranqFire(timestamp, sourceGUID, "HIT", targetName);
-  elseif (subEvent=="SPELL_DISPEL_FAILED") then
-    Tranquilize.Hunters:TranqFire(timestamp, sourceGUID, "HIT (failed)", targetName);
   end
 end
 

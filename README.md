@@ -23,7 +23,12 @@ Feel free to drop suggestions or bug details my way in comments. This is still a
 
 Features added in each version are documented here. Versions follow a modified semver, with a major.minor.patch structure. Patch is omitted from this changelog as it is simply used to iterate game versions.
 
+### v3.2
+
+- J/K maybe we actually fix the bug this time.
+
 ### v3.1
+
 - Fix bug where simultaneous tranq shots only render for the first hunter.
 - Update to latest WoW Classic version.
 
