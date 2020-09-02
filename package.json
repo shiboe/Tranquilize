@@ -14,7 +14,7 @@
   "author": "Stephen Cave <sccave@gmail.com>",
   "license": "ISC",
   "dependencies": {
-    "bestzip": "^2.1.5",
+    "bestzip": "^2.1.7",
     "onchange": "7.0.2"
   }
 }
